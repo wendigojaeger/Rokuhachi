@@ -104,8 +104,8 @@ pub const Z80Bus = struct {
     read8: Read8Fn,
     write8: Write8Fn,
 
-    pub const Read8Fn = fn (address: u16) u8;
-    pub const Write8Fn = fn (address: u16, data: u8) void;
+    pub const Read8Fn = fn (bus: *Z80Bus, address: u16) u8;
+    pub const Write8Fn = fn (bus: *Z80Bus, address: u16, data: u8) void;
 };
 
 pub const InterruptMode = packed enum(u2) {
@@ -114,9 +114,7 @@ pub const InterruptMode = packed enum(u2) {
     Mode2,
 };
 
-const Timings = [_][]const u8{
-    &[_]u8{4}, // 0x00 - NOP
-};
+const Timings = @import("z80/timings.zig").Timings;
 
 pub const Z80 = struct {
     registers: Z80Registers,
@@ -131,11 +129,11 @@ pub const Z80 = struct {
     current_instruction_storage: [3]u8 = undefined,
 
     current_instruction: []const u8 = undefined,
-    bus: Z80Bus = undefined,
+    bus: *Z80Bus = undefined,
 
     const Self = @This();
 
-    pub fn init(bus: Z80Bus) Self {
+    pub fn init(bus: *Z80Bus) Self {
         var result = Self{
             .registers = Z80Registers.init(),
             .bus = bus,
@@ -164,6 +162,8 @@ pub const Z80 = struct {
         self.registers.interrupt_enable2 = false;
         self.current_t = 0;
         self.current_m = 0;
+        self.total_t_cycles = 0;
+        self.total_m_cycles = 0;
     }
 
     // BUSREQ ?
@@ -171,22 +171,85 @@ pub const Z80 = struct {
     pub fn tick(self: *Self) void {
         if (self.current_t == 0 and self.current_m == 0) {
             // Read instruction from memory
-            self.current_instruction_storage[0] = self.bus.read8(self.registers.pc);
+            self.current_instruction_storage[0] = self.bus.read8(self.bus, self.registers.pc);
+            self.registers.pc += 1;
             self.current_instruction = self.current_instruction_storage[0..1];
 
             self.current_cycles = Timings[self.current_instruction[0]];
             self.current_m = 0;
             self.current_t = self.current_cycles[self.current_m];
-            self.registers.pc += 1;
+        }
 
-            switch (self.current_instruction[0]) {
-                0x00 => {
-                    // NOP
-                },
-                else => {
-                    std.debug.panic("Opcode 0x{x} not implemented!\n", .{self.current_instruction[0]});
-                },
-            }
+        switch (self.current_instruction[0]) {
+            0x00 => {
+                // NOP
+            },
+            0x06 => {
+                // LD B,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.bc.pair.B = immediate;
+                }
+            },
+            0x0e => {
+                // LD C,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.bc.pair.C = immediate;
+                }
+            },
+            0x16 => {
+                // LD D,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.de.pair.D = immediate;
+                }
+            },
+            0x1e => {
+                // LD E,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.de.pair.E = immediate;
+                }
+            },
+            0x26 => {
+                // LD H,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.hl.pair.H = immediate;
+                }
+            },
+            0x2e => {
+                // LD L,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.hl.pair.L = immediate;
+                }
+            },
+            0x3e => {
+                // LD A,n
+                if (self.current_m == 1 and self.current_t == 3) {
+                    const immediate = self.bus.read8(self.bus, self.registers.pc);
+                    self.registers.pc += 1;
+
+                    self.registers.main_registers.af.pair.A = immediate;
+                }
+            },
+            else => {
+                std.debug.panic("Opcode 0x{x} not implemented!\n", .{self.current_instruction[0]});
+            },
         }
 
         if (self.current_t != 0) {
@@ -202,8 +265,9 @@ pub const Z80 = struct {
                     self.current_t = 0;
                 }
             }
-            self.total_t_cycles += 1;
         }
+
+        self.total_t_cycles += 1;
         // When halted, do NOP
     }
 };

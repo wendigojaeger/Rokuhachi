@@ -16,12 +16,16 @@
             }
         },
         {
+            "label": "Build_Test",
+            "type": "shell",
+            "command": "zig test tests/tests.zig --output-dir zig-cache/tests --pkg-begin rokuhachi lib/main.zig --pkg-end",
+            "problemMatcher": "$gcc"
+        },
+        {
             "label": "Run tests",
             "type": "shell",
             "command": "zig build test",
-            "problemMatcher": [
-                "$gcc"
-            ]
+            "problemMatcher": "$gcc"
         }
     ]
 }
