@@ -185,67 +185,25 @@ pub const Z80 = struct {
                 // NOP
             },
             0x06 => {
-                // LD B,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.bc.pair.B = immediate;
-                }
+                self.LD(dest_reg_B, source_imm8);
             },
             0x0e => {
-                // LD C,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.bc.pair.C = immediate;
-                }
+                self.LD(dest_reg_C, source_imm8);
             },
             0x16 => {
-                // LD D,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.de.pair.D = immediate;
-                }
+                self.LD(dest_reg_D, source_imm8);
             },
             0x1e => {
-                // LD E,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.de.pair.E = immediate;
-                }
+                self.LD(dest_reg_E, source_imm8);
             },
             0x26 => {
-                // LD H,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.hl.pair.H = immediate;
-                }
+                self.LD(dest_reg_H, source_imm8);
             },
             0x2e => {
-                // LD L,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.hl.pair.L = immediate;
-                }
+                self.LD(dest_reg_L, source_imm8);
             },
             0x3e => {
-                // LD A,n
-                if (self.current_m == 1 and self.current_t == 3) {
-                    const immediate = self.bus.read8(self.bus, self.registers.pc);
-                    self.registers.pc += 1;
-
-                    self.registers.main_registers.af.pair.A = immediate;
-                }
+                self.LD(dest_reg_A, source_imm8);
             },
             else => {
                 std.debug.panic("Opcode 0x{x} not implemented!\n", .{self.current_instruction[0]});
@@ -268,6 +226,122 @@ pub const Z80 = struct {
         }
 
         self.total_t_cycles += 1;
-        // When halted, do NOP
+        // TODO: When halted, do NOP
+    }
+
+    const DestinationFn = fn (self: *Self, data: u16) void;
+    const SourceFn = fn (self: *Self) ?u16;
+
+    inline fn LD(self: *Self, comptime destinationFn: DestinationFn, comptime sourceFn: SourceFn) void {
+        const readData = sourceFn(self);
+        if (readData) |data| {
+            destinationFn(self, data);
+        }
+    }
+
+    inline fn dest_reg_A(self: *Self, data: u16) void {
+        self.registers.main_registers.af.pair.A = @truncate(u8, data);
+    }
+
+    inline fn source_reg_A(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.af.A;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_F(self: *Self, data: u16) void {
+        self.registers.main_registers.af.pair.F = @truncate(u8, data);
+    }
+
+    inline fn source_reg_F(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.af.F;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_B(self: *Self, data: u16) void {
+        self.registers.main_registers.bc.pair.B = @truncate(u8, data);
+    }
+
+    inline fn source_reg_B(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.bc.B;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_C(self: *Self, data: u16) void {
+        self.registers.main_registers.bc.pair.C = @truncate(u8, data);
+    }
+
+    inline fn source_reg_C(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.bc.C;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_D(self: *Self, data: u16) void {
+        self.registers.main_registers.de.pair.D = @truncate(u8, data);
+    }
+
+    inline fn source_reg_D(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.de.D;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_E(self: *Self, data: u16) void {
+        self.registers.main_registers.de.pair.E = @truncate(u8, data);
+    }
+
+    inline fn source_reg_E(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.de.E;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_H(self: *Self, data: u16) void {
+        self.registers.main_registers.hl.pair.H = @truncate(u8, data);
+    }
+
+    inline fn source_reg_H(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.hl.H;
+        }
+
+        return null;
+    }
+
+    inline fn dest_reg_L(self: *Self, data: u16) void {
+        self.registers.main_registers.hl.pair.L = @truncate(u8, data);
+    }
+
+    inline fn source_reg_L(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 3) {
+            return self.registers.main_registers.hl.L;
+        }
+
+        return null;
+    }
+
+    inline fn source_imm8(self: *Self) ?u16 {
+        if (self.current_m == 1 and self.current_t == 3) {
+            const result: u16 = self.bus.read8(self.bus, self.registers.pc);
+            self.registers.pc += 1;
+            return result;
+        }
+
+        return null;
     }
 };
