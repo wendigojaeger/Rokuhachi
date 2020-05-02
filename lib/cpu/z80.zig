@@ -116,6 +116,21 @@ pub const InterruptMode = packed enum(u2) {
 
 const Timings = @import("z80/timings.zig").Timings;
 
+const InstructionMask = struct {
+    pub const LoadRegister_Register = 0b01000000;
+    pub const LoadRegister_Immediate = 0b00000110;
+};
+
+const RegisterMask = enum(u3) {
+    A = 0b111,
+    B = 0b000,
+    C = 0b001,
+    D = 0b010,
+    E = 0b011,
+    H = 0b100,
+    L = 0b101,
+};
+
 pub const Z80 = struct {
     registers: Z80Registers,
     interrupt_mode: InterruptMode = .Mode0,
@@ -186,181 +201,48 @@ pub const Z80 = struct {
             self.current_t = self.current_cycles[self.current_m];
         }
 
-        switch (self.current_instruction[0]) {
-            0x00 => {
-                // NOP
-            },
-            0x06 => {
-                self.LD(dest_reg_B, source_imm8);
-            },
-            0x0e => {
-                self.LD(dest_reg_C, source_imm8);
-            },
-            0x16 => {
-                self.LD(dest_reg_D, source_imm8);
-            },
-            0x1e => {
-                self.LD(dest_reg_E, source_imm8);
-            },
-            0x26 => {
-                self.LD(dest_reg_H, source_imm8);
-            },
-            0x2e => {
-                self.LD(dest_reg_L, source_imm8);
-            },
-            0x3e => {
-                self.LD(dest_reg_A, source_imm8);
-            },
-            0x40 => {
-                self.LD(dest_reg_B, source_reg_B);
-            },
-            0x41 => {
-                self.LD(dest_reg_B, source_reg_C);
-            },
-            0x42 => {
-                self.LD(dest_reg_B, source_reg_D);
-            },
-            0x43 => {
-                self.LD(dest_reg_B, source_reg_E);
-            },
-            0x44 => {
-                self.LD(dest_reg_B, source_reg_H);
-            },
-            0x45 => {
-                self.LD(dest_reg_B, source_reg_L);
-            },
-            0x47 => {
-                self.LD(dest_reg_B, source_reg_A);
-            },
-            0x48 => {
-                self.LD(dest_reg_C, source_reg_B);
-            },
-            0x49 => {
-                self.LD(dest_reg_C, source_reg_C);
-            },
-            0x4A => {
-                self.LD(dest_reg_C, source_reg_D);
-            },
-            0x4B => {
-                self.LD(dest_reg_C, source_reg_E);
-            },
-            0x4C => {
-                self.LD(dest_reg_C, source_reg_H);
-            },
-            0x4D => {
-                self.LD(dest_reg_C, source_reg_L);
-            },
-            0x4F => {
-                self.LD(dest_reg_C, source_reg_A);
-            },
-            0x50 => {
-                self.LD(dest_reg_D, source_reg_B);
-            },
-            0x51 => {
-                self.LD(dest_reg_D, source_reg_C);
-            },
-            0x52 => {
-                self.LD(dest_reg_D, source_reg_D);
-            },
-            0x53 => {
-                self.LD(dest_reg_D, source_reg_E);
-            },
-            0x54 => {
-                self.LD(dest_reg_D, source_reg_H);
-            },
-            0x55 => {
-                self.LD(dest_reg_D, source_reg_L);
-            },
-            0x57 => {
-                self.LD(dest_reg_D, source_reg_A);
-            },
-            0x58 => {
-                self.LD(dest_reg_E, source_reg_B);
-            },
-            0x59 => {
-                self.LD(dest_reg_E, source_reg_C);
-            },
-            0x5A => {
-                self.LD(dest_reg_E, source_reg_D);
-            },
-            0x5B => {
-                self.LD(dest_reg_E, source_reg_E);
-            },
-            0x5C => {
-                self.LD(dest_reg_E, source_reg_H);
-            },
-            0x5D => {
-                self.LD(dest_reg_E, source_reg_L);
-            },
-            0x5F => {
-                self.LD(dest_reg_E, source_reg_A);
-            },
-            0x60 => {
-                self.LD(dest_reg_H, source_reg_B);
-            },
-            0x61 => {
-                self.LD(dest_reg_H, source_reg_C);
-            },
-            0x62 => {
-                self.LD(dest_reg_H, source_reg_D);
-            },
-            0x63 => {
-                self.LD(dest_reg_H, source_reg_E);
-            },
-            0x64 => {
-                self.LD(dest_reg_H, source_reg_H);
-            },
-            0x65 => {
-                self.LD(dest_reg_H, source_reg_L);
-            },
-            0x67 => {
-                self.LD(dest_reg_H, source_reg_A);
-            },
-            0x68 => {
-                self.LD(dest_reg_L, source_reg_B);
-            },
-            0x69 => {
-                self.LD(dest_reg_L, source_reg_C);
-            },
-            0x6A => {
-                self.LD(dest_reg_L, source_reg_D);
-            },
-            0x6B => {
-                self.LD(dest_reg_L, source_reg_E);
-            },
-            0x6C => {
-                self.LD(dest_reg_L, source_reg_H);
-            },
-            0x6D => {
-                self.LD(dest_reg_L, source_reg_L);
-            },
-            0x6F => {
-                self.LD(dest_reg_L, source_reg_A);
-            },
-            0x78 => {
-                self.LD(dest_reg_A, source_reg_B);
-            },
-            0x79 => {
-                self.LD(dest_reg_A, source_reg_C);
-            },
-            0x7A => {
-                self.LD(dest_reg_A, source_reg_D);
-            },
-            0x7B => {
-                self.LD(dest_reg_A, source_reg_E);
-            },
-            0x7C => {
-                self.LD(dest_reg_A, source_reg_H);
-            },
-            0x7D => {
-                self.LD(dest_reg_A, source_reg_L);
-            },
-            0x7F => {
-                self.LD(dest_reg_A, source_reg_A);
-            },
-            else => {
-                std.debug.panic("Opcode 0x{x} not implemented!\n", .{self.current_instruction[0]});
-            },
+        const current_opcode = self.current_instruction[0];
+
+        var executed: bool = false;
+
+        // NOP
+        if (current_opcode == 0x00) {
+            executed = true;
+        }
+        // LD r,r'
+        inline for (std.meta.fields(RegisterMask)) |destination_field| {
+            const destination_register = comptime @intToEnum(RegisterMask, destination_field.value);
+
+            inline for (std.meta.fields(RegisterMask)) |source_field| {
+                const source_register = comptime @intToEnum(RegisterMask, source_field.value);
+
+                const ld_register_register_opcode = InstructionMask.LoadRegister_Register | @as(u8, @enumToInt(source_register)) | (@as(u8, @enumToInt(destination_register)) << 3);
+
+                if (current_opcode == ld_register_register_opcode) {
+                    const dest_fn = comptime dest_reg_fn(destination_register);
+                    const source_fn = comptime source_reg_fn(source_register);
+
+                    self.LD(dest_fn, source_fn);
+                    executed = true;
+                }
+            }
+        }
+        // LD r,n
+        inline for (std.meta.fields(RegisterMask)) |destination_field| {
+            const destination_register = comptime @intToEnum(RegisterMask, destination_field.value);
+
+            const ld_reg_imm_opcode = InstructionMask.LoadRegister_Immediate | (@as(u8, @enumToInt(destination_register)) << 3);
+
+            if (current_opcode == ld_reg_imm_opcode) {
+                const dest_fn = comptime dest_reg_fn(destination_register);
+
+                self.LD(dest_fn, source_imm8);
+                executed = true;
+            }
+        }
+
+        if (!executed or Timings[current_opcode].len == 0) {
+            std.debug.panic("Opcode 0x0{x} not implemented!\n", .{current_opcode});
         }
 
         if (self.current_t != 0) {
@@ -389,6 +271,30 @@ pub const Z80 = struct {
         if (readData) |data| {
             destinationFn(self, data);
         }
+    }
+
+    fn dest_reg_fn(comptime register: RegisterMask) fn (self: *Self, data: u16) void {
+        return switch (register) {
+            .A => return dest_reg_A,
+            .B => return dest_reg_B,
+            .C => return dest_reg_C,
+            .D => return dest_reg_D,
+            .E => return dest_reg_E,
+            .H => return dest_reg_H,
+            .L => return dest_reg_L,
+        };
+    }
+
+    fn source_reg_fn(comptime register: RegisterMask) fn (self: *Self) ?u16 {
+        return switch (register) {
+            .A => return source_reg_A,
+            .B => return source_reg_B,
+            .C => return source_reg_C,
+            .D => return source_reg_D,
+            .E => return source_reg_E,
+            .H => return source_reg_H,
+            .L => return source_reg_L,
+        };
     }
 
     inline fn dest_reg_A(self: *Self, data: u16) void {
