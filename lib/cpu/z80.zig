@@ -79,8 +79,8 @@ pub const GeneralRegisters = packed struct {
 };
 
 pub const Z80Registers = struct {
-    main_registers: GeneralRegisters,
-    alternate_registers: GeneralRegisters,
+    main: GeneralRegisters,
+    alternate: GeneralRegisters,
     ix: u16 = 0,
     iy: u16 = 0,
     sp: u16 = 0,
@@ -94,8 +94,8 @@ pub const Z80Registers = struct {
 
     pub fn init() Self {
         return Self{
-            .main_registers = GeneralRegisters.init(),
-            .alternate_registers = GeneralRegisters.init(),
+            .main = GeneralRegisters.init(),
+            .alternate = GeneralRegisters.init(),
         };
     }
 };
@@ -119,6 +119,7 @@ const Timings = @import("z80/timings.zig").Timings;
 const InstructionMask = struct {
     pub const LoadRegister_Register = 0b01000000;
     pub const LoadRegister_Immediate = 0b00000110;
+    pub const LoadRegister_IndirectHL = 0b01000110;
 };
 
 const RegisterMask = enum(u3) {
@@ -145,6 +146,7 @@ pub const Z80 = struct {
 
     current_instruction: []const u8 = undefined,
     bus: *Z80Bus = undefined,
+    temp_pointer: u16 = 0,
 
     const Self = @This();
 
@@ -216,9 +218,9 @@ pub const Z80 = struct {
             inline for (std.meta.fields(RegisterMask)) |source_field| {
                 const source_register = comptime @intToEnum(RegisterMask, source_field.value);
 
-                const ld_register_register_opcode = InstructionMask.LoadRegister_Register | @as(u8, @enumToInt(source_register)) | (@as(u8, @enumToInt(destination_register)) << 3);
+                const ld_reg_reg_opcode = InstructionMask.LoadRegister_Register | @as(u8, @enumToInt(source_register)) | (@as(u8, @enumToInt(destination_register)) << 3);
 
-                if (current_opcode == ld_register_register_opcode) {
+                if (current_opcode == ld_reg_reg_opcode) {
                     const dest_fn = comptime dest_reg_fn(destination_register);
                     const source_fn = comptime source_reg_fn(source_register);
 
@@ -240,9 +242,26 @@ pub const Z80 = struct {
                 executed = true;
             }
         }
+        // LD r, (HL)
+        inline for (std.meta.fields(RegisterMask)) |destination_field| {
+            const destination_register = comptime @intToEnum(RegisterMask, destination_field.value);
 
-        if (!executed or Timings[current_opcode].len == 0) {
+            const ld_reg_indirect_hl_opcode = InstructionMask.LoadRegister_IndirectHL | (@as(u8, @enumToInt(destination_register)) << 3);
+
+            if (current_opcode == ld_reg_indirect_hl_opcode) {
+                const dest_fn = comptime dest_reg_fn(destination_register);
+
+                self.LD(dest_fn, source_indirect_hl);
+                executed = true;
+            }
+        }
+
+        if (!executed) {
             std.debug.panic("Opcode 0x0{x} not implemented!\n", .{current_opcode});
+        }
+
+        if (Timings[current_opcode].len == 0) {
+            std.debug.panic("Opcode 0x0{x} does not have timing!\n", .{current_opcode});
         }
 
         if (self.current_t != 0) {
@@ -298,96 +317,96 @@ pub const Z80 = struct {
     }
 
     inline fn dest_reg_A(self: *Self, data: u16) void {
-        self.registers.main_registers.af.pair.A = @truncate(u8, data);
+        self.registers.main.af.pair.A = @truncate(u8, data);
     }
 
     inline fn source_reg_A(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.af.pair.A;
+            return self.registers.main.af.pair.A;
         }
 
         return null;
     }
 
     inline fn dest_reg_F(self: *Self, data: u16) void {
-        self.registers.main_registers.af.pair.F = @truncate(u8, data);
+        self.registers.main.af.pair.F = @truncate(u8, data);
     }
 
     inline fn source_reg_F(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.af.pair.F;
+            return self.registers.main.af.pair.F;
         }
 
         return null;
     }
 
     inline fn dest_reg_B(self: *Self, data: u16) void {
-        self.registers.main_registers.bc.pair.B = @truncate(u8, data);
+        self.registers.main.bc.pair.B = @truncate(u8, data);
     }
 
     inline fn source_reg_B(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.bc.pair.B;
+            return self.registers.main.bc.pair.B;
         }
 
         return null;
     }
 
     inline fn dest_reg_C(self: *Self, data: u16) void {
-        self.registers.main_registers.bc.pair.C = @truncate(u8, data);
+        self.registers.main.bc.pair.C = @truncate(u8, data);
     }
 
     inline fn source_reg_C(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.bc.pair.C;
+            return self.registers.main.bc.pair.C;
         }
 
         return null;
     }
 
     inline fn dest_reg_D(self: *Self, data: u16) void {
-        self.registers.main_registers.de.pair.D = @truncate(u8, data);
+        self.registers.main.de.pair.D = @truncate(u8, data);
     }
 
     inline fn source_reg_D(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.de.pair.D;
+            return self.registers.main.de.pair.D;
         }
 
         return null;
     }
 
     inline fn dest_reg_E(self: *Self, data: u16) void {
-        self.registers.main_registers.de.pair.E = @truncate(u8, data);
+        self.registers.main.de.pair.E = @truncate(u8, data);
     }
 
     inline fn source_reg_E(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.de.pair.E;
+            return self.registers.main.de.pair.E;
         }
 
         return null;
     }
 
     inline fn dest_reg_H(self: *Self, data: u16) void {
-        self.registers.main_registers.hl.pair.H = @truncate(u8, data);
+        self.registers.main.hl.pair.H = @truncate(u8, data);
     }
 
     inline fn source_reg_H(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.hl.pair.H;
+            return self.registers.main.hl.pair.H;
         }
 
         return null;
     }
 
     inline fn dest_reg_L(self: *Self, data: u16) void {
-        self.registers.main_registers.hl.pair.L = @truncate(u8, data);
+        self.registers.main.hl.pair.L = @truncate(u8, data);
     }
 
     inline fn source_reg_L(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.hl.pair.L;
+            return self.registers.main.hl.pair.L;
         }
 
         return null;
@@ -397,6 +416,17 @@ pub const Z80 = struct {
         if (self.current_m == 1 and self.current_t == 3) {
             const result: u16 = self.bus.read8(self.bus, self.registers.pc);
             self.registers.pc += 1;
+            return result;
+        }
+
+        return null;
+    }
+
+    inline fn source_indirect_hl(self: *Self) ?u16 {
+        if (self.current_m == 0 and self.current_t == 2) {
+            self.temp_pointer = self.registers.main.hl.raw;
+        } else if (self.current_m == 1 and self.current_t == 3) {
+            const result: u16 = self.bus.read8(self.bus, self.temp_pointer);
             return result;
         }
 

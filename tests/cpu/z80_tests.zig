@@ -135,450 +135,450 @@ test "Z80 LD register <- register" {
 
     // LD A,A
     {
-        cpu.registers.main_registers.af.pair.A = 0xFF;
+        cpu.registers.main.af.pair.A = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0xFF);
+        expectEq(cpu.registers.main.af.pair.A, 0xFF);
     }
     // LD A,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x0B);
+        expectEq(cpu.registers.main.af.pair.A, 0x0B);
     }
     // LD A,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0x0C;
+        cpu.registers.main.bc.pair.C = 0x0C;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x0C);
+        expectEq(cpu.registers.main.af.pair.A, 0x0C);
     }
     // LD A,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x0D);
+        expectEq(cpu.registers.main.af.pair.A, 0x0D);
     }
     // LD A,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0D;
+        cpu.registers.main.de.pair.E = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x0D);
+        expectEq(cpu.registers.main.af.pair.A, 0x0D);
     }
     // LD A,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x01);
+        expectEq(cpu.registers.main.af.pair.A, 0x01);
     }
     // LD A,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.af.pair.A, 0x02);
+        expectEq(cpu.registers.main.af.pair.A, 0x02);
     }
 
     // LD B,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x0A);
+        expectEq(cpu.registers.main.bc.pair.B, 0x0A);
     }
     // LD B,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0xFF;
+        cpu.registers.main.bc.pair.B = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0xFF);
+        expectEq(cpu.registers.main.bc.pair.B, 0xFF);
     }
     // LD B,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0x0C;
+        cpu.registers.main.bc.pair.C = 0x0C;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x0C);
+        expectEq(cpu.registers.main.bc.pair.B, 0x0C);
     }
     // LD B,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x0D);
+        expectEq(cpu.registers.main.bc.pair.B, 0x0D);
     }
     // LD B,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x0E);
+        expectEq(cpu.registers.main.bc.pair.B, 0x0E);
     }
     // LD B,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x01);
+        expectEq(cpu.registers.main.bc.pair.B, 0x01);
     }
     // LD B,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.B, 0x02);
+        expectEq(cpu.registers.main.bc.pair.B, 0x02);
     }
 
     // LD C,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x0A);
+        expectEq(cpu.registers.main.bc.pair.C, 0x0A);
     }
     // LD C,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x0B);
+        expectEq(cpu.registers.main.bc.pair.C, 0x0B);
     }
     // LD C,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0xFF;
+        cpu.registers.main.bc.pair.C = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0xFF);
+        expectEq(cpu.registers.main.bc.pair.C, 0xFF);
     }
     // LD C,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x0D);
+        expectEq(cpu.registers.main.bc.pair.C, 0x0D);
     }
     // LD C,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x0E);
+        expectEq(cpu.registers.main.bc.pair.C, 0x0E);
     }
     // LD C,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x01);
+        expectEq(cpu.registers.main.bc.pair.C, 0x01);
     }
     // LD C,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.bc.pair.C, 0x02);
+        expectEq(cpu.registers.main.bc.pair.C, 0x02);
     }
 
     // LD D,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x0A);
+        expectEq(cpu.registers.main.de.pair.D, 0x0A);
     }
     // LD D,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x0B);
+        expectEq(cpu.registers.main.de.pair.D, 0x0B);
     }
     // LD D,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0xFF;
+        cpu.registers.main.bc.pair.C = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0xFF);
+        expectEq(cpu.registers.main.de.pair.D, 0xFF);
     }
     // LD D,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x0D);
+        expectEq(cpu.registers.main.de.pair.D, 0x0D);
     }
     // LD D,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x0E);
+        expectEq(cpu.registers.main.de.pair.D, 0x0E);
     }
     // LD D,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x01);
+        expectEq(cpu.registers.main.de.pair.D, 0x01);
     }
     // LD D,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.D, 0x02);
+        expectEq(cpu.registers.main.de.pair.D, 0x02);
     }
 
     // LD E,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x0A);
+        expectEq(cpu.registers.main.de.pair.E, 0x0A);
     }
     // LD E,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x0B);
+        expectEq(cpu.registers.main.de.pair.E, 0x0B);
     }
     // LD E,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0xFF;
+        cpu.registers.main.bc.pair.C = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0xFF);
+        expectEq(cpu.registers.main.de.pair.E, 0xFF);
     }
     // LD E,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x0D);
+        expectEq(cpu.registers.main.de.pair.E, 0x0D);
     }
     // LD E,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x0E);
+        expectEq(cpu.registers.main.de.pair.E, 0x0E);
     }
     // LD E,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x01);
+        expectEq(cpu.registers.main.de.pair.E, 0x01);
     }
     // LD E,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.de.pair.E, 0x02);
+        expectEq(cpu.registers.main.de.pair.E, 0x02);
     }
 
     // LD H,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x0A);
+        expectEq(cpu.registers.main.hl.pair.H, 0x0A);
     }
     // LD H,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x0B);
+        expectEq(cpu.registers.main.hl.pair.H, 0x0B);
     }
     // LD H,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0xFF;
+        cpu.registers.main.bc.pair.C = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0xFF);
+        expectEq(cpu.registers.main.hl.pair.H, 0xFF);
     }
     // LD H,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x0D);
+        expectEq(cpu.registers.main.hl.pair.H, 0x0D);
     }
     // LD H,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x0E);
+        expectEq(cpu.registers.main.hl.pair.H, 0x0E);
     }
     // LD H,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x01);
+        expectEq(cpu.registers.main.hl.pair.H, 0x01);
     }
     // LD H,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.H, 0x02);
+        expectEq(cpu.registers.main.hl.pair.H, 0x02);
     }
 
     // LD L,A
     {
-        cpu.registers.main_registers.af.pair.A = 0x0A;
+        cpu.registers.main.af.pair.A = 0x0A;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x0A);
+        expectEq(cpu.registers.main.hl.pair.L, 0x0A);
     }
     // LD L,B
     {
-        cpu.registers.main_registers.bc.pair.B = 0x0B;
+        cpu.registers.main.bc.pair.B = 0x0B;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x0B);
+        expectEq(cpu.registers.main.hl.pair.L, 0x0B);
     }
     // LD L,C
     {
-        cpu.registers.main_registers.bc.pair.C = 0xFF;
+        cpu.registers.main.bc.pair.C = 0xFF;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0xFF);
+        expectEq(cpu.registers.main.hl.pair.L, 0xFF);
     }
     // LD L,D
     {
-        cpu.registers.main_registers.de.pair.D = 0x0D;
+        cpu.registers.main.de.pair.D = 0x0D;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x0D);
+        expectEq(cpu.registers.main.hl.pair.L, 0x0D);
     }
     // LD L,E
     {
-        cpu.registers.main_registers.de.pair.E = 0x0E;
+        cpu.registers.main.de.pair.E = 0x0E;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x0E);
+        expectEq(cpu.registers.main.hl.pair.L, 0x0E);
     }
     // LD L,H
     {
-        cpu.registers.main_registers.hl.pair.H = 0x01;
+        cpu.registers.main.hl.pair.H = 0x01;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x01);
+        expectEq(cpu.registers.main.hl.pair.L, 0x01);
     }
     // LD L,L
     {
-        cpu.registers.main_registers.hl.pair.L = 0x02;
+        cpu.registers.main.hl.pair.L = 0x02;
         var i: usize = 0;
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main_registers.hl.pair.L, 0x02);
+        expectEq(cpu.registers.main.hl.pair.L, 0x02);
     }
 }
 
@@ -601,14 +601,112 @@ test "Z80 LD register <- immediate data" {
         cpu.tick();
     }
 
-    expectEq(cpu.registers.main_registers.af.pair.A, 0x02);
-    expectEq(cpu.registers.main_registers.bc.pair.B, 0x12);
-    expectEq(cpu.registers.main_registers.bc.pair.C, 0x22);
-    expectEq(cpu.registers.main_registers.de.pair.D, 0x32);
-    expectEq(cpu.registers.main_registers.de.pair.E, 0x42);
-    expectEq(cpu.registers.main_registers.hl.pair.H, 0x52);
-    expectEq(cpu.registers.main_registers.hl.pair.L, 0x62);
+    expectEq(cpu.registers.main.af.pair.A, 0x02);
+    expectEq(cpu.registers.main.bc.pair.B, 0x12);
+    expectEq(cpu.registers.main.bc.pair.C, 0x22);
+    expectEq(cpu.registers.main.de.pair.D, 0x32);
+    expectEq(cpu.registers.main.de.pair.E, 0x42);
+    expectEq(cpu.registers.main.hl.pair.H, 0x52);
+    expectEq(cpu.registers.main.hl.pair.L, 0x62);
 
     expectEq(cpu.total_t_cycles, 7 * 7);
     expectEq(cpu.total_m_cycles, 7 * 2);
+}
+
+test "Z80 LD register <- (HL)" {
+    var test_io = TestIO(256, &[_]u8{
+        0x26, 0x80, // LD H, #$80
+        0x2e, 0x00, // LD L, #$00
+        0x7e, // LD A, (HL)
+            0x46, // LD B, (HL)
+        0x4e, // LD C, (HL)
+            0x56, // LD D, (HL)
+        0x5e, // LD E, (HL)
+            0x66, // LD H, (HL)
+        0x26, 0x80, // LD H, #$80
+        0x6e, // LD L, (HL)
+    }).init(std.testing.allocator);
+    defer test_io.deinit();
+
+    var cpu = z80.Z80.init(&test_io.bus);
+
+    {
+        var i: usize = 0;
+        while (i < (7 * 2)) : (i += 1) {
+            cpu.tick();
+        }
+    }
+
+    {
+        test_io.ram[0] = 1;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.af.pair.A, 0x01);
+    }
+
+    {
+        test_io.ram[0] = 2;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.bc.pair.B, 0x02);
+    }
+
+    {
+        test_io.ram[0] = 3;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.bc.pair.C, 0x03);
+    }
+
+    {
+        test_io.ram[0] = 4;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.de.pair.D, 0x04);
+    }
+
+    {
+        test_io.ram[0] = 5;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.de.pair.E, 0x05);
+    }
+
+    {
+        test_io.ram[0] = 6;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.hl.pair.H, 0x06);
+    }
+
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+    }
+
+    {
+        test_io.ram[0] = 7;
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(cpu.registers.main.hl.pair.L, 0x07);
+    }
+
+    expectEq(cpu.total_t_cycles, 10 * 7);
+    expectEq(cpu.total_m_cycles, 10 * 2);
 }
