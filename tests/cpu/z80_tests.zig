@@ -710,3 +710,98 @@ test "Z80 LD register <- (HL)" {
     expectEq(cpu.total_t_cycles, 10 * 7);
     expectEq(cpu.total_m_cycles, 10 * 2);
 }
+
+test "Z80 LD (HL) <- r" {
+    var test_io = TestIO(256, &[_]u8{
+        0x3e, 0x02, // LD A, #$02
+        0x06, 0x12, // LD B, #$12
+        0x0e, 0x22, // LD C, #$22
+        0x16, 0x32, // LD D, #$32
+        0x1e, 0x42, // LD E, #$42
+        0x26, 0x80, // LD H, #$80
+        0x2e, 0x01, // LD L, #$01
+        0x77, // LD (HL), A
+            0x70, // LD (HL), B
+        0x71, // LD (HL), C
+            0x72, // LD (HL), D
+        0x73, // LD (HL), E
+            0x74, // LD (HL), H
+        0x75, // LD (HL), L
+    }).init(std.testing.allocator);
+    defer test_io.deinit();
+
+    var cpu = z80.Z80.init(&test_io.bus);
+
+    {
+        var i: usize = 0;
+        while (i < (7 * 7)) : (i += 1) {
+            cpu.tick();
+        }
+    }
+
+    // LD (HL), A
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x02);
+    }
+
+    // LD (HL), B
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x12);
+    }
+
+    // LD (HL), C
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x22);
+    }
+
+    // LD (HL), D
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x32);
+    }
+
+    // LD (HL), E
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x42);
+    }
+
+    // LD (HL), H
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x80);
+    }
+
+    // LD (HL), L
+    {
+        var i: usize = 0;
+        while (i < 7) : (i += 1) {
+            cpu.tick();
+        }
+        expectEq(test_io.ram[1], 0x01);
+    }
+
+    expectEq(cpu.total_t_cycles, 14 * 7);
+    expectEq(cpu.total_m_cycles, 14 * 2);
+}

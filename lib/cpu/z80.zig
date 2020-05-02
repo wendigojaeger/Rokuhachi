@@ -117,9 +117,10 @@ pub const InterruptMode = packed enum(u2) {
 const Timings = @import("z80/timings.zig").Timings;
 
 const InstructionMask = struct {
-    pub const LoadRegister_Register = 0b01000000;
-    pub const LoadRegister_Immediate = 0b00000110;
-    pub const LoadRegister_IndirectHL = 0b01000110;
+    pub const Load_Register_Register = 0b01000000;
+    pub const Load_Register_Immediate = 0b00000110;
+    pub const Load_Register_IndirectHL = 0b01000110;
+    pub const Load_IndirectHL_Register = 0b01110000;
 };
 
 const RegisterMask = enum(u3) {
@@ -218,7 +219,7 @@ pub const Z80 = struct {
             inline for (std.meta.fields(RegisterMask)) |source_field| {
                 const source_register = comptime @intToEnum(RegisterMask, source_field.value);
 
-                const ld_reg_reg_opcode = InstructionMask.LoadRegister_Register | @as(u8, @enumToInt(source_register)) | (@as(u8, @enumToInt(destination_register)) << 3);
+                const ld_reg_reg_opcode = InstructionMask.Load_Register_Register | @as(u8, @enumToInt(source_register)) | (@as(u8, @enumToInt(destination_register)) << 3);
 
                 if (current_opcode == ld_reg_reg_opcode) {
                     const dest_fn = comptime dest_reg_fn(destination_register);
@@ -233,7 +234,7 @@ pub const Z80 = struct {
         inline for (std.meta.fields(RegisterMask)) |destination_field| {
             const destination_register = comptime @intToEnum(RegisterMask, destination_field.value);
 
-            const ld_reg_imm_opcode = InstructionMask.LoadRegister_Immediate | (@as(u8, @enumToInt(destination_register)) << 3);
+            const ld_reg_imm_opcode = InstructionMask.Load_Register_Immediate | (@as(u8, @enumToInt(destination_register)) << 3);
 
             if (current_opcode == ld_reg_imm_opcode) {
                 const dest_fn = comptime dest_reg_fn(destination_register);
@@ -246,12 +247,25 @@ pub const Z80 = struct {
         inline for (std.meta.fields(RegisterMask)) |destination_field| {
             const destination_register = comptime @intToEnum(RegisterMask, destination_field.value);
 
-            const ld_reg_indirect_hl_opcode = InstructionMask.LoadRegister_IndirectHL | (@as(u8, @enumToInt(destination_register)) << 3);
+            const ld_reg_indirect_hl_opcode = InstructionMask.Load_Register_IndirectHL | (@as(u8, @enumToInt(destination_register)) << 3);
 
             if (current_opcode == ld_reg_indirect_hl_opcode) {
                 const dest_fn = comptime dest_reg_fn(destination_register);
 
                 self.LD(dest_fn, source_indirect_hl);
+                executed = true;
+            }
+        }
+        // LD (HL), r
+        inline for (std.meta.fields(RegisterMask)) |source_field| {
+            const source_register = comptime @intToEnum(RegisterMask, source_field.value);
+
+            const ld_indirecthl_reg_opcode = InstructionMask.Load_IndirectHL_Register | @as(u8, @enumToInt(source_register));
+
+            if (current_opcode == ld_indirecthl_reg_opcode) {
+                const source_fn = comptime source_reg_fn(source_register);
+
+                self.LD(dest_indirect_hl, source_fn);
                 executed = true;
             }
         }
@@ -420,6 +434,13 @@ pub const Z80 = struct {
         }
 
         return null;
+    }
+
+    inline fn dest_indirect_hl(self: *Self, data: u16) void {
+        if (self.current_m == 0 and self.current_t == 3) {
+            const pointer = self.registers.main.hl.raw;
+            self.bus.write8(self.bus, pointer, @truncate(u8, data));
+        }
     }
 
     inline fn source_indirect_hl(self: *Self) ?u16 {
