@@ -170,10 +170,16 @@ pub const Z80 = struct {
 
     pub fn tick(self: *Self) void {
         if (self.current_t == 0 and self.current_m == 0) {
-            // Read instruction from memory
-            self.current_instruction_storage[0] = self.bus.read8(self.bus, self.registers.pc);
-            self.registers.pc += 1;
-            self.current_instruction = self.current_instruction_storage[0..1];
+            // When halted, do NOP
+            if (self.is_halted) {
+                self.current_instruction_storage[0] = 0;
+                self.current_instruction = self.current_instruction_storage[0..1];
+            } else {
+                // Read instruction from memory
+                self.current_instruction_storage[0] = self.bus.read8(self.bus, self.registers.pc);
+                self.registers.pc += 1;
+                self.current_instruction = self.current_instruction_storage[0..1];
+            }
 
             self.current_cycles = Timings[self.current_instruction[0]];
             self.current_m = 0;
@@ -205,6 +211,153 @@ pub const Z80 = struct {
             0x3e => {
                 self.LD(dest_reg_A, source_imm8);
             },
+            0x40 => {
+                self.LD(dest_reg_B, source_reg_B);
+            },
+            0x41 => {
+                self.LD(dest_reg_B, source_reg_C);
+            },
+            0x42 => {
+                self.LD(dest_reg_B, source_reg_D);
+            },
+            0x43 => {
+                self.LD(dest_reg_B, source_reg_E);
+            },
+            0x44 => {
+                self.LD(dest_reg_B, source_reg_H);
+            },
+            0x45 => {
+                self.LD(dest_reg_B, source_reg_L);
+            },
+            0x47 => {
+                self.LD(dest_reg_B, source_reg_A);
+            },
+            0x48 => {
+                self.LD(dest_reg_C, source_reg_B);
+            },
+            0x49 => {
+                self.LD(dest_reg_C, source_reg_C);
+            },
+            0x4A => {
+                self.LD(dest_reg_C, source_reg_D);
+            },
+            0x4B => {
+                self.LD(dest_reg_C, source_reg_E);
+            },
+            0x4C => {
+                self.LD(dest_reg_C, source_reg_H);
+            },
+            0x4D => {
+                self.LD(dest_reg_C, source_reg_L);
+            },
+            0x4F => {
+                self.LD(dest_reg_C, source_reg_A);
+            },
+            0x50 => {
+                self.LD(dest_reg_D, source_reg_B);
+            },
+            0x51 => {
+                self.LD(dest_reg_D, source_reg_C);
+            },
+            0x52 => {
+                self.LD(dest_reg_D, source_reg_D);
+            },
+            0x53 => {
+                self.LD(dest_reg_D, source_reg_E);
+            },
+            0x54 => {
+                self.LD(dest_reg_D, source_reg_H);
+            },
+            0x55 => {
+                self.LD(dest_reg_D, source_reg_L);
+            },
+            0x57 => {
+                self.LD(dest_reg_D, source_reg_A);
+            },
+            0x58 => {
+                self.LD(dest_reg_E, source_reg_B);
+            },
+            0x59 => {
+                self.LD(dest_reg_E, source_reg_C);
+            },
+            0x5A => {
+                self.LD(dest_reg_E, source_reg_D);
+            },
+            0x5B => {
+                self.LD(dest_reg_E, source_reg_E);
+            },
+            0x5C => {
+                self.LD(dest_reg_E, source_reg_H);
+            },
+            0x5D => {
+                self.LD(dest_reg_E, source_reg_L);
+            },
+            0x5F => {
+                self.LD(dest_reg_E, source_reg_A);
+            },
+            0x60 => {
+                self.LD(dest_reg_H, source_reg_B);
+            },
+            0x61 => {
+                self.LD(dest_reg_H, source_reg_C);
+            },
+            0x62 => {
+                self.LD(dest_reg_H, source_reg_D);
+            },
+            0x63 => {
+                self.LD(dest_reg_H, source_reg_E);
+            },
+            0x64 => {
+                self.LD(dest_reg_H, source_reg_H);
+            },
+            0x65 => {
+                self.LD(dest_reg_H, source_reg_L);
+            },
+            0x67 => {
+                self.LD(dest_reg_H, source_reg_A);
+            },
+            0x68 => {
+                self.LD(dest_reg_L, source_reg_B);
+            },
+            0x69 => {
+                self.LD(dest_reg_L, source_reg_C);
+            },
+            0x6A => {
+                self.LD(dest_reg_L, source_reg_D);
+            },
+            0x6B => {
+                self.LD(dest_reg_L, source_reg_E);
+            },
+            0x6C => {
+                self.LD(dest_reg_L, source_reg_H);
+            },
+            0x6D => {
+                self.LD(dest_reg_L, source_reg_L);
+            },
+            0x6F => {
+                self.LD(dest_reg_L, source_reg_A);
+            },
+            0x78 => {
+                self.LD(dest_reg_A, source_reg_B);
+            },
+            0x79 => {
+                self.LD(dest_reg_A, source_reg_C);
+            },
+            0x7A => {
+                self.LD(dest_reg_A, source_reg_D);
+            },
+            0x7B => {
+                self.LD(dest_reg_A, source_reg_E);
+            },
+            0x7C => {
+                self.LD(dest_reg_A, source_reg_H);
+            },
+            0x7D => {
+                self.LD(dest_reg_A, source_reg_L);
+            },
+            0x7F => {
+                self.LD(dest_reg_A, source_reg_A);
+            },
             else => {
                 std.debug.panic("Opcode 0x{x} not implemented!\n", .{self.current_instruction[0]});
             },
@@ -226,7 +379,6 @@ pub const Z80 = struct {
         }
 
         self.total_t_cycles += 1;
-        // TODO: When halted, do NOP
     }
 
     const DestinationFn = fn (self: *Self, data: u16) void;
@@ -245,7 +397,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_A(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.af.A;
+            return self.registers.main_registers.af.pair.A;
         }
 
         return null;
@@ -257,7 +409,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_F(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.af.F;
+            return self.registers.main_registers.af.pair.F;
         }
 
         return null;
@@ -269,7 +421,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_B(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.bc.B;
+            return self.registers.main_registers.bc.pair.B;
         }
 
         return null;
@@ -281,7 +433,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_C(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.bc.C;
+            return self.registers.main_registers.bc.pair.C;
         }
 
         return null;
@@ -293,7 +445,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_D(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.de.D;
+            return self.registers.main_registers.de.pair.D;
         }
 
         return null;
@@ -305,7 +457,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_E(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.de.E;
+            return self.registers.main_registers.de.pair.E;
         }
 
         return null;
@@ -317,7 +469,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_H(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.hl.H;
+            return self.registers.main_registers.hl.pair.H;
         }
 
         return null;
@@ -329,7 +481,7 @@ pub const Z80 = struct {
 
     inline fn source_reg_L(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
-            return self.registers.main_registers.hl.L;
+            return self.registers.main_registers.hl.pair.L;
         }
 
         return null;
