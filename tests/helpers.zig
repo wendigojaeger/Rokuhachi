@@ -1,7 +1,7 @@
 const std = @import("std");
 const testing = std.testing;
 
-pub fn expectEq(actual: var, expected: var) void {
+pub fn expectEq(actual: anytype, expected: anytype) void {
     testing.expectEqual(@as(@TypeOf(actual), expected), actual);
 }
 
@@ -9,7 +9,7 @@ pub fn expectEqSlice(comptime T: type, actual: []const T, expected: []const T) v
     testing.expectEqualSlices(T, expected, actual);
 }
 
-pub fn expectError(actual: var, expected: anyerror) void {
+pub fn expectError(actual: anytype, expected: anyerror) void {
     testing.expectError(expected, actual);
 }
 
