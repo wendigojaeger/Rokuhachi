@@ -306,7 +306,7 @@ pub const Z80 = struct {
         }
     }
 
-    fn dest_reg_fn(comptime register: RegisterMask) fn (self: *Self, data: u16) void {
+    inline fn dest_reg_fn(comptime register: RegisterMask) DestinationFn {
         return switch (register) {
             .A => return dest_reg_A,
             .B => return dest_reg_B,
@@ -318,7 +318,7 @@ pub const Z80 = struct {
         };
     }
 
-    fn source_reg_fn(comptime register: RegisterMask) fn (self: *Self) ?u16 {
+    inline fn source_reg_fn(comptime register: RegisterMask) SourceFn {
         return switch (register) {
             .A => return source_reg_A,
             .B => return source_reg_B,
@@ -330,11 +330,11 @@ pub const Z80 = struct {
         };
     }
 
-    inline fn dest_reg_A(self: *Self, data: u16) void {
+    fn dest_reg_A(self: *Self, data: u16) void {
         self.registers.main.af.pair.A = @truncate(u8, data);
     }
 
-    inline fn source_reg_A(self: *Self) ?u16 {
+    fn source_reg_A(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.af.pair.A;
         }
@@ -342,11 +342,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_F(self: *Self, data: u16) void {
+    fn dest_reg_F(self: *Self, data: u16) void {
         self.registers.main.af.pair.F = @truncate(u8, data);
     }
 
-    inline fn source_reg_F(self: *Self) ?u16 {
+    fn source_reg_F(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.af.pair.F;
         }
@@ -354,11 +354,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_B(self: *Self, data: u16) void {
+    fn dest_reg_B(self: *Self, data: u16) void {
         self.registers.main.bc.pair.B = @truncate(u8, data);
     }
 
-    inline fn source_reg_B(self: *Self) ?u16 {
+    fn source_reg_B(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.bc.pair.B;
         }
@@ -366,11 +366,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_C(self: *Self, data: u16) void {
+    fn dest_reg_C(self: *Self, data: u16) void {
         self.registers.main.bc.pair.C = @truncate(u8, data);
     }
 
-    inline fn source_reg_C(self: *Self) ?u16 {
+    fn source_reg_C(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.bc.pair.C;
         }
@@ -378,11 +378,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_D(self: *Self, data: u16) void {
+    fn dest_reg_D(self: *Self, data: u16) void {
         self.registers.main.de.pair.D = @truncate(u8, data);
     }
 
-    inline fn source_reg_D(self: *Self) ?u16 {
+    fn source_reg_D(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.de.pair.D;
         }
@@ -390,11 +390,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_E(self: *Self, data: u16) void {
+    fn dest_reg_E(self: *Self, data: u16) void {
         self.registers.main.de.pair.E = @truncate(u8, data);
     }
 
-    inline fn source_reg_E(self: *Self) ?u16 {
+    fn source_reg_E(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.de.pair.E;
         }
@@ -402,11 +402,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_H(self: *Self, data: u16) void {
+    fn dest_reg_H(self: *Self, data: u16) void {
         self.registers.main.hl.pair.H = @truncate(u8, data);
     }
 
-    inline fn source_reg_H(self: *Self) ?u16 {
+    fn source_reg_H(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.hl.pair.H;
         }
@@ -414,11 +414,11 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_reg_L(self: *Self, data: u16) void {
+    fn dest_reg_L(self: *Self, data: u16) void {
         self.registers.main.hl.pair.L = @truncate(u8, data);
     }
 
-    inline fn source_reg_L(self: *Self) ?u16 {
+    fn source_reg_L(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 3) {
             return self.registers.main.hl.pair.L;
         }
@@ -426,7 +426,7 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn source_imm8(self: *Self) ?u16 {
+    fn source_imm8(self: *Self) ?u16 {
         if (self.current_m == 1 and self.current_t == 3) {
             const result: u16 = self.bus.read8(self.bus, self.registers.pc);
             self.registers.pc += 1;
@@ -436,14 +436,14 @@ pub const Z80 = struct {
         return null;
     }
 
-    inline fn dest_indirect_hl(self: *Self, data: u16) void {
+    fn dest_indirect_hl(self: *Self, data: u16) void {
         if (self.current_m == 0 and self.current_t == 3) {
             const pointer = self.registers.main.hl.raw;
             self.bus.write8(self.bus, pointer, @truncate(u8, data));
         }
     }
 
-    inline fn source_indirect_hl(self: *Self) ?u16 {
+    fn source_indirect_hl(self: *Self) ?u16 {
         if (self.current_m == 0 and self.current_t == 2) {
             self.temp_pointer = self.registers.main.hl.raw;
         } else if (self.current_m == 1 and self.current_t == 3) {

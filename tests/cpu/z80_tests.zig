@@ -67,8 +67,8 @@ test "Z80 NOP" {
         cpu.tick();
     }
 
-    expectEq(cpu.total_t_cycles, 4);
-    expectEq(cpu.total_m_cycles, 1);
+    try expectEq(cpu.total_t_cycles, 4);
+    try expectEq(cpu.total_m_cycles, 1);
 }
 
 test "Z80 LD register <- register" {
@@ -140,7 +140,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0xFF);
+        try expectEq(cpu.registers.main.af.pair.A, 0xFF);
     }
     // LD A,B
     {
@@ -149,7 +149,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x0B);
+        try expectEq(cpu.registers.main.af.pair.A, 0x0B);
     }
     // LD A,C
     {
@@ -158,7 +158,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x0C);
+        try expectEq(cpu.registers.main.af.pair.A, 0x0C);
     }
     // LD A,D
     {
@@ -167,7 +167,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x0D);
+        try expectEq(cpu.registers.main.af.pair.A, 0x0D);
     }
     // LD A,E
     {
@@ -176,7 +176,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x0D);
+        try expectEq(cpu.registers.main.af.pair.A, 0x0D);
     }
     // LD A,H
     {
@@ -185,7 +185,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x01);
+        try expectEq(cpu.registers.main.af.pair.A, 0x01);
     }
     // LD A,L
     {
@@ -194,7 +194,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x02);
+        try expectEq(cpu.registers.main.af.pair.A, 0x02);
     }
 
     // LD B,A
@@ -204,7 +204,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x0A);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x0A);
     }
     // LD B,B
     {
@@ -213,7 +213,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0xFF);
+        try expectEq(cpu.registers.main.bc.pair.B, 0xFF);
     }
     // LD B,C
     {
@@ -222,7 +222,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x0C);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x0C);
     }
     // LD B,D
     {
@@ -231,7 +231,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x0D);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x0D);
     }
     // LD B,E
     {
@@ -240,7 +240,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x0E);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x0E);
     }
     // LD B,H
     {
@@ -249,7 +249,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x01);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x01);
     }
     // LD B,L
     {
@@ -258,7 +258,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x02);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x02);
     }
 
     // LD C,A
@@ -268,7 +268,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x0A);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x0A);
     }
     // LD C,B
     {
@@ -277,7 +277,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x0B);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x0B);
     }
     // LD C,C
     {
@@ -286,7 +286,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0xFF);
+        try expectEq(cpu.registers.main.bc.pair.C, 0xFF);
     }
     // LD C,D
     {
@@ -295,7 +295,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x0D);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x0D);
     }
     // LD C,E
     {
@@ -304,7 +304,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x0E);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x0E);
     }
     // LD C,H
     {
@@ -313,7 +313,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x01);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x01);
     }
     // LD C,L
     {
@@ -322,7 +322,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x02);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x02);
     }
 
     // LD D,A
@@ -332,7 +332,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x0A);
+        try expectEq(cpu.registers.main.de.pair.D, 0x0A);
     }
     // LD D,B
     {
@@ -341,7 +341,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x0B);
+        try expectEq(cpu.registers.main.de.pair.D, 0x0B);
     }
     // LD D,C
     {
@@ -350,7 +350,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0xFF);
+        try expectEq(cpu.registers.main.de.pair.D, 0xFF);
     }
     // LD D,D
     {
@@ -359,7 +359,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x0D);
+        try expectEq(cpu.registers.main.de.pair.D, 0x0D);
     }
     // LD D,E
     {
@@ -368,7 +368,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x0E);
+        try expectEq(cpu.registers.main.de.pair.D, 0x0E);
     }
     // LD D,H
     {
@@ -377,7 +377,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x01);
+        try expectEq(cpu.registers.main.de.pair.D, 0x01);
     }
     // LD D,L
     {
@@ -386,7 +386,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x02);
+        try expectEq(cpu.registers.main.de.pair.D, 0x02);
     }
 
     // LD E,A
@@ -396,7 +396,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x0A);
+        try expectEq(cpu.registers.main.de.pair.E, 0x0A);
     }
     // LD E,B
     {
@@ -405,7 +405,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x0B);
+        try expectEq(cpu.registers.main.de.pair.E, 0x0B);
     }
     // LD E,C
     {
@@ -414,7 +414,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0xFF);
+        try expectEq(cpu.registers.main.de.pair.E, 0xFF);
     }
     // LD E,D
     {
@@ -423,7 +423,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x0D);
+        try expectEq(cpu.registers.main.de.pair.E, 0x0D);
     }
     // LD E,E
     {
@@ -432,7 +432,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x0E);
+        try expectEq(cpu.registers.main.de.pair.E, 0x0E);
     }
     // LD E,H
     {
@@ -441,7 +441,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x01);
+        try expectEq(cpu.registers.main.de.pair.E, 0x01);
     }
     // LD E,L
     {
@@ -450,7 +450,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x02);
+        try expectEq(cpu.registers.main.de.pair.E, 0x02);
     }
 
     // LD H,A
@@ -460,7 +460,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x0A);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x0A);
     }
     // LD H,B
     {
@@ -469,7 +469,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x0B);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x0B);
     }
     // LD H,C
     {
@@ -478,7 +478,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0xFF);
+        try expectEq(cpu.registers.main.hl.pair.H, 0xFF);
     }
     // LD H,D
     {
@@ -487,7 +487,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x0D);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x0D);
     }
     // LD H,E
     {
@@ -496,7 +496,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x0E);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x0E);
     }
     // LD H,H
     {
@@ -505,7 +505,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x01);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x01);
     }
     // LD H,L
     {
@@ -514,7 +514,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x02);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x02);
     }
 
     // LD L,A
@@ -524,7 +524,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x0A);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x0A);
     }
     // LD L,B
     {
@@ -533,7 +533,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x0B);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x0B);
     }
     // LD L,C
     {
@@ -542,7 +542,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0xFF);
+        try expectEq(cpu.registers.main.hl.pair.L, 0xFF);
     }
     // LD L,D
     {
@@ -551,7 +551,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x0D);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x0D);
     }
     // LD L,E
     {
@@ -560,7 +560,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x0E);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x0E);
     }
     // LD L,H
     {
@@ -569,7 +569,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x01);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x01);
     }
     // LD L,L
     {
@@ -578,7 +578,7 @@ test "Z80 LD register <- register" {
         while (i < 4) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x02);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x02);
     }
 }
 
@@ -601,16 +601,16 @@ test "Z80 LD register <- immediate data" {
         cpu.tick();
     }
 
-    expectEq(cpu.registers.main.af.pair.A, 0x02);
-    expectEq(cpu.registers.main.bc.pair.B, 0x12);
-    expectEq(cpu.registers.main.bc.pair.C, 0x22);
-    expectEq(cpu.registers.main.de.pair.D, 0x32);
-    expectEq(cpu.registers.main.de.pair.E, 0x42);
-    expectEq(cpu.registers.main.hl.pair.H, 0x52);
-    expectEq(cpu.registers.main.hl.pair.L, 0x62);
+    try expectEq(cpu.registers.main.af.pair.A, 0x02);
+    try expectEq(cpu.registers.main.bc.pair.B, 0x12);
+    try expectEq(cpu.registers.main.bc.pair.C, 0x22);
+    try expectEq(cpu.registers.main.de.pair.D, 0x32);
+    try expectEq(cpu.registers.main.de.pair.E, 0x42);
+    try expectEq(cpu.registers.main.hl.pair.H, 0x52);
+    try expectEq(cpu.registers.main.hl.pair.L, 0x62);
 
-    expectEq(cpu.total_t_cycles, 7 * 7);
-    expectEq(cpu.total_m_cycles, 7 * 2);
+    try expectEq(cpu.total_t_cycles, 7 * 7);
+    try expectEq(cpu.total_m_cycles, 7 * 2);
 }
 
 test "Z80 LD register <- (HL)" {
@@ -618,11 +618,11 @@ test "Z80 LD register <- (HL)" {
         0x26, 0x80, // LD H, #$80
         0x2e, 0x00, // LD L, #$00
         0x7e, // LD A, (HL)
-            0x46, // LD B, (HL)
+        0x46, // LD B, (HL)
         0x4e, // LD C, (HL)
-            0x56, // LD D, (HL)
+        0x56, // LD D, (HL)
         0x5e, // LD E, (HL)
-            0x66, // LD H, (HL)
+        0x66, // LD H, (HL)
         0x26, 0x80, // LD H, #$80
         0x6e, // LD L, (HL)
     }).init(std.testing.allocator);
@@ -643,7 +643,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.af.pair.A, 0x01);
+        try expectEq(cpu.registers.main.af.pair.A, 0x01);
     }
 
     {
@@ -652,7 +652,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.B, 0x02);
+        try expectEq(cpu.registers.main.bc.pair.B, 0x02);
     }
 
     {
@@ -661,7 +661,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.bc.pair.C, 0x03);
+        try expectEq(cpu.registers.main.bc.pair.C, 0x03);
     }
 
     {
@@ -670,7 +670,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.D, 0x04);
+        try expectEq(cpu.registers.main.de.pair.D, 0x04);
     }
 
     {
@@ -679,7 +679,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.de.pair.E, 0x05);
+        try expectEq(cpu.registers.main.de.pair.E, 0x05);
     }
 
     {
@@ -688,7 +688,7 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.H, 0x06);
+        try expectEq(cpu.registers.main.hl.pair.H, 0x06);
     }
 
     {
@@ -704,11 +704,11 @@ test "Z80 LD register <- (HL)" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(cpu.registers.main.hl.pair.L, 0x07);
+        try expectEq(cpu.registers.main.hl.pair.L, 0x07);
     }
 
-    expectEq(cpu.total_t_cycles, 10 * 7);
-    expectEq(cpu.total_m_cycles, 10 * 2);
+    try expectEq(cpu.total_t_cycles, 10 * 7);
+    try expectEq(cpu.total_m_cycles, 10 * 2);
 }
 
 test "Z80 LD (HL) <- r" {
@@ -721,11 +721,11 @@ test "Z80 LD (HL) <- r" {
         0x26, 0x80, // LD H, #$80
         0x2e, 0x01, // LD L, #$01
         0x77, // LD (HL), A
-            0x70, // LD (HL), B
+        0x70, // LD (HL), B
         0x71, // LD (HL), C
-            0x72, // LD (HL), D
+        0x72, // LD (HL), D
         0x73, // LD (HL), E
-            0x74, // LD (HL), H
+        0x74, // LD (HL), H
         0x75, // LD (HL), L
     }).init(std.testing.allocator);
     defer test_io.deinit();
@@ -745,7 +745,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x02);
+        try expectEq(test_io.ram[1], 0x02);
     }
 
     // LD (HL), B
@@ -754,7 +754,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x12);
+        try expectEq(test_io.ram[1], 0x12);
     }
 
     // LD (HL), C
@@ -763,7 +763,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x22);
+        try expectEq(test_io.ram[1], 0x22);
     }
 
     // LD (HL), D
@@ -772,7 +772,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x32);
+        try expectEq(test_io.ram[1], 0x32);
     }
 
     // LD (HL), E
@@ -781,7 +781,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x42);
+        try expectEq(test_io.ram[1], 0x42);
     }
 
     // LD (HL), H
@@ -790,7 +790,7 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x80);
+        try expectEq(test_io.ram[1], 0x80);
     }
 
     // LD (HL), L
@@ -799,9 +799,9 @@ test "Z80 LD (HL) <- r" {
         while (i < 7) : (i += 1) {
             cpu.tick();
         }
-        expectEq(test_io.ram[1], 0x01);
+        try expectEq(test_io.ram[1], 0x01);
     }
 
-    expectEq(cpu.total_t_cycles, 14 * 7);
-    expectEq(cpu.total_m_cycles, 14 * 2);
+    try expectEq(cpu.total_t_cycles, 14 * 7);
+    try expectEq(cpu.total_m_cycles, 14 * 2);
 }
